@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock Trend Prediction | AI Analysis Dashboard</title>
+    <title>Stock Trend Prediction | ML Analysis Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -44,7 +44,7 @@
             margin-bottom: 30px;
         }
 
-        .container {
+        .contMLner {
             max-width: 1400px;
         }
 
@@ -119,7 +119,7 @@
             border-color: #43a047;
         }
 
-        .chart-container {
+        .chart-contMLner {
             background-color: var(--card-bg);
             border-radius: 10px;
             padding: 5px;
@@ -127,7 +127,7 @@
             overflow: hidden;
         }
 
-        .chart-container img {
+        .chart-contMLner img {
             border-radius: 8px;
             width: 100%;
             height: auto;
@@ -340,21 +340,21 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container">
+        <div class="contMLner">
             <a class="navbar-brand" href="#">
-                <i class="fas fa-chart-line me-2"></i>StockAI Predictor
+                <i class="fas fa-chart-line me-2"></i>StockML Predictor
             </a>
         </div>
     </nav>
 
     <div class="header-section">
-        <div class="container">
+        <div class="contMLner">
             <h1><i class="fas fa-chart-line me-2"></i>Stock Trend Prediction</h1>
-            <p class="text-secondary">Advanced AI-powered stock analysis and prediction dashboard</p>
+            <p class="text-secondary">Advanced ML-powered stock analysis and prediction dashboard</p>
         </div>
     </div>
 
-    <div class="container">
+    <div class="contMLner">
         <div class="row">
             <div class="col-md-4">
                 <div class="card">
@@ -453,10 +453,10 @@
                 {% if plot_path_prediction %}
                 <div class="card">
                     <div class="card-header">
-                        <i class="fas fa-robot me-2"></i>AI Prediction Results
+                        <i class="fas fa-robot me-2"></i>ML Prediction Results
                     </div>
                     <div class="card-body">
-                        <div class="chart-container">
+                        <div class="chart-contMLner">
                             <img src="{{ url_for('static', filename='stock_prediction.png') }}" class="img-fluid" alt="Prediction vs Original">
                         </div>
                         <div class="text-center mt-3">
@@ -472,7 +472,7 @@
                         <i class="fas fa-chart-line me-2"></i>Technical Analysis (Short Term)
                     </div>
                     <div class="card-body">
-                        <div class="chart-container">
+                        <div class="chart-contMLner">
                             <img src="{{ url_for('static', filename='ema_20_50.png') }}" class="img-fluid" alt="EMA 20 & 50">
                         </div>
                         <div class="text-center mt-3">
@@ -488,7 +488,7 @@
                         <i class="fas fa-chart-area me-2"></i>Technical Analysis (Long Term)
                     </div>
                     <div class="card-body">
-                        <div class="chart-container">
+                        <div class="chart-contMLner">
                             <img src="{{ url_for('static', filename='ema_100_200.png') }}" class="img-fluid" alt="EMA 100 & 200">
                         </div>
                         <div class="text-center mt-3">
@@ -506,7 +506,7 @@
                 <div class="card">
                     <div class="card-body py-5">
                         <i class="fas fa-chart-line fa-4x mb-3" style="color: var(--accent);"></i>
-                        <h3 class="mb-3">Welcome to StockAI Predictor</h3>
+                        <h3 class="mb-3">Welcome to StockML Predictor</h3>
                         <p class="text-secondary">Enter a stock ticker symbol above to generate predictions and technical analysis.</p>
                         <p class="text-secondary">Try popular stocks like AAPL (Apple), MSFT (Microsoft), or GOOGL (Google).</p>
                     </div>
