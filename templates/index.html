@@ -3,70 +3,543 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock Trend Prediction</title>
+    <title>Stock Trend Prediction | AI Analysis Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --dark-bg: #121212;
+            --card-bg: #1e1e1e;
+            --accent: #3a86ff;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --border-color: #333;
+            --success: #4CAF50;
+            --danger: #FF5252;
+            --warning: #f5c518;
+            --chart-border: #444;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-bottom: 50px;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background-color: rgba(18, 18, 18, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            padding: 12px 0;
+        }
+
+        .header-section {
+            padding: 40px 0 20px;
+            background: linear-gradient(to right, #121212, #1a1a1a);
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+
         .container {
-            max-width: 1200px;
-            margin-top: 50px;
+            max-width: 1400px;
         }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 600;
+            padding: 15px 20px;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .form-control, .btn {
+            border-radius: 8px;
+            padding: 10px 15px;
+        }
+
+        .form-control {
+            background-color: #2d2d2d;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .form-control:focus {
+            background-color: #333;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 0.25rem rgba(58, 134, 255, 0.25);
+            color: white;
+        }
+
+        .form-label {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary:hover {
+            background-color: #1a73e8;
+            border-color: #1a73e8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-success {
+            background-color: var(--success);
+            border-color: var(--success);
+        }
+
+        .btn-success:hover {
+            background-color: #43a047;
+            border-color: #43a047;
+        }
+
         .chart-container {
-            margin-top: 30px;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 5px;
+            border: 1px solid var(--chart-border);
+            overflow: hidden;
         }
-        .table-responsive {
-            margin-top: 20px;
+
+        .chart-container img {
+            border-radius: 8px;
+            width: 100%;
+            height: auto;
         }
+
+        .chart-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .chart-title i {
+            margin-right: 10px;
+        }
+
+        table {
+            width: 100%;
+            color: var(--text-primary);
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .table {
+            color: var(--text-primary);
+            border-color: var(--border-color);
+        }
+
+        .table-bordered td, .table-bordered th {
+            border-color: var(--border-color);
+        }
+
+        thead {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        th {
+            padding: 12px 15px;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 10px 15px;
+            border-top: 1px solid var(--border-color);
+        }
+
         .download-link {
-            margin-top: 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .metrics-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -10px 20px;
+        }
+
+        .metric-card {
+            flex: 1;
+            min-width: 200px;
+            margin: 0 10px 20px;
+            padding: 15px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 10px 0;
+            color: var(--accent);
+        }
+
+        .metric-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .ticker-input {
+            display: flex;
+        }
+
+        .ticker-input .form-control {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        .ticker-input .btn {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--accent);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .tooltip-icon {
+            color: var(--text-secondary);
+            margin-left: 5px;
+            cursor: help;
+        }
+
+        .stock-info {
+            padding: 15px;
+            border-radius: 8px;
+            background-color: rgba(58, 134, 255, 0.1);
+            border: 1px solid rgba(58, 134, 255, 0.2);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .stock-info i {
+            font-size: 24px;
+            margin-right: 15px;
+            color: var(--accent);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 10px;
+            margin-right: 10px;
+            border-radius: 2px;
+        }
+
+        .legend-color.price {
+            background-color: var(--warning);
+        }
+
+        .legend-color.ema-short {
+            background-color: var(--success);
+        }
+
+        .legend-color.ema-long {
+            background-color: var(--danger);
+        }
+
+        .legend-text {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .alert {
+            background-color: rgba(255, 82, 82, 0.15);
+            border: 1px solid rgba(255, 82, 82, 0.3);
+            color: var(--text-primary);
+        }
+
+        .examples {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .example-tag {
+            background-color: rgba(58, 134, 255, 0.15);
+            border: 1px solid rgba(58, 134, 255, 0.3);
+            border-radius: 4px;
+            padding: 4px 10px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .example-tag:hover {
+            background-color: rgba(58, 134, 255, 0.25);
+        }
+
+        @media (max-width: 768px) {
+            .metrics-row {
+                flex-direction: column;
+            }
+            
+            .metric-card {
+                width: calc(100% - 20px);
+            }
         }
     </style>
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-chart-line me-2"></i>StockAI Predictor
+            </a>
+        </div>
+    </nav>
+
+    <div class="header-section">
+        <div class="container">
+            <h1><i class="fas fa-chart-line me-2"></i>Stock Trend Prediction</h1>
+            <p class="text-secondary">Advanced AI-powered stock analysis and prediction dashboard</p>
+        </div>
+    </div>
+
     <div class="container">
-        <h1 class="text-center">Stock Trend Prediction</h1>
-        <form method="POST">
-            <div class="mb-3">
-                <label for="stock" class="form-label">Enter Stock Ticker:</label>
-                <input type="text" class="form-control" id="stock" name="stock" value="POWERGRID.NS">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-search me-2"></i>Stock Selection
+                    </div>
+                    <div class="card-body">
+                        {% if error %}
+                        <div class="alert mb-3" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i> {{ error }}
+                        </div>
+                        {% endif %}
+                        
+                        <form method="POST" id="stock-form">
+                            <div class="mb-3">
+                                <label for="stock" class="form-label">Enter Stock Ticker:</label>
+                                <div class="ticker-input">
+                                    <input type="text" class="form-control" id="stock" name="stock" 
+                                           value="{{ stock_symbol }}" 
+                                           placeholder="Enter stock symbol (e.g., AAPL)">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-search me-1"></i> Analyze
+                                    </button>
+                                </div>
+                                <small class="text-secondary mt-2 d-block">For Indian stocks, add .NS (NSE) or .BO (BSE)</small>
+                                
+                                <div class="examples">
+                                    <span class="example-tag" onclick="setStock('AAPL')">AAPL</span>
+                                    <span class="example-tag" onclick="setStock('MSFT')">MSFT</span>
+                                    <span class="example-tag" onclick="setStock('GOOGL')">GOOGL</span>
+                                    <span class="example-tag" onclick="setStock('RELIANCE.NS')">RELIANCE.NS</span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                {% if stock_symbol %}
+                <div class="stock-info">
+                    <i class="fas fa-info-circle"></i>
+                    <div>
+                        <h5 class="mb-1">Currently Analyzing: {{ stock_symbol }}</h5>
+                        <p class="mb-0 text-secondary">Data range: Jan 2000 - Oct 2024</p>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if data_desc %}
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-calculator me-2"></i>Stock Statistics
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            {{ data_desc | safe }}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-info-circle me-2"></i>Chart Legend
+                    </div>
+                    <div class="card-body">
+                        <div class="legend-item">
+                            <div class="legend-color price"></div>
+                            <div class="legend-text">Closing Price</div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color ema-short"></div>
+                            <div class="legend-text">Short-term EMA (20/100 Days)</div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color ema-long"></div>
+                            <div class="legend-text">Long-term EMA (50/200 Days)</div>
+                        </div>
+                    </div>
+                </div>
+
+                {% if dataset_link %}
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-download me-2"></i>Export Data
+                    </div>
+                    <div class="card-body text-center">
+                        <a href="{{ url_for('download_file', filename=dataset_link.split('/')[-1]) }}" class="btn btn-success" download>
+                            <i class="fas fa-file-csv me-2"></i>Download Dataset (CSV)
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-        
-        {% if plot_path_ema_20_50 %}
-        <div class="chart-container">
-            <h3>Closing Price vs Time (20 & 50 Days EMA)</h3>
-            <img src="{{ url_for('static', filename='ema_20_50.png') }}" class="img-fluid" alt="EMA 20 & 50">
+            
+            <div class="col-md-8">
+                {% if plot_path_prediction %}
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-robot me-2"></i>AI Prediction Results
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <img src="{{ url_for('static', filename='stock_prediction.png') }}" class="img-fluid" alt="Prediction vs Original">
+                        </div>
+                        <div class="text-center mt-3">
+                            <small class="text-secondary">Red line shows predicted prices, green line shows actual prices</small>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if plot_path_ema_20_50 %}
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-chart-line me-2"></i>Technical Analysis (Short Term)
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <img src="{{ url_for('static', filename='ema_20_50.png') }}" class="img-fluid" alt="EMA 20 & 50">
+                        </div>
+                        <div class="text-center mt-3">
+                            <small class="text-secondary">20 & 50 Day Exponential Moving Averages (EMA)</small>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                {% if plot_path_ema_100_200 %}
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-chart-area me-2"></i>Technical Analysis (Long Term)
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <img src="{{ url_for('static', filename='ema_100_200.png') }}" class="img-fluid" alt="EMA 100 & 200">
+                        </div>
+                        <div class="text-center mt-3">
+                            <small class="text-secondary">100 & 200 Day Exponential Moving Averages (EMA)</small>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
         </div>
-        {% endif %}
         
-        {% if plot_path_ema_100_200 %}
-        <div class="chart-container">
-            <h3>Closing Price vs Time (100 & 200 Days EMA)</h3>
-            <img src="{{ url_for('static', filename='ema_100_200.png') }}" class="img-fluid" alt="EMA 100 & 200">
-        </div>
-        {% endif %}
-        
-        {% if plot_path_prediction %}
-        <div class="chart-container">
-            <h3>Prediction vs Original Trend</h3>
-            <img src="{{ url_for('static', filename='stock_prediction.png') }}" class="img-fluid" alt="Prediction vs Original">
-        </div>
-        {% endif %}
-        
-        {% if data_desc %}
-        <div class="table-responsive">
-            <h3 class="mt-4">Descriptive Data from Jan 2000 to Nov 2024</h3>
-            {{ data_desc | safe }}
-        </div>
-        {% endif %}
-        
-        {% if dataset_link %}
-        <div class="download-link">
-            <a href="{{ url_for('download_file', filename=dataset_link.split('/')[-1]) }}" class="btn btn-success" download>Download Dataset (CSV)</a>
+        {% if not plot_path_prediction %}
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-8 text-center">
+                <div class="card">
+                    <div class="card-body py-5">
+                        <i class="fas fa-chart-line fa-4x mb-3" style="color: var(--accent);"></i>
+                        <h3 class="mb-3">Welcome to StockAI Predictor</h3>
+                        <p class="text-secondary">Enter a stock ticker symbol above to generate predictions and technical analysis.</p>
+                        <p class="text-secondary">Try popular stocks like AAPL (Apple), MSFT (Microsoft), or GOOGL (Google).</p>
+                    </div>
+                </div>
+            </div>
         </div>
         {% endif %}
     </div>
 
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner"></div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Show loading overlay when form is submitted
+        document.getElementById('stock-form').addEventListener('submit', function() {
+            document.getElementById('loading-overlay').style.display = 'flex';
+        });
+        
+        // Format table for better appearance
+        document.addEventListener('DOMContentLoaded', function() {
+            const tables = document.querySelectorAll('table');
+            tables.forEach(table => {
+                table.classList.add('table', 'table-bordered', 'table-sm');
+            });
+        });
+        
+        // Set stock example when clicking on example tags
+        function setStock(symbol) {
+            document.getElementById('stock').value = symbol;
+            document.getElementById('stock-form').submit();
+        }
+    </script>
 </body>
 </html>
